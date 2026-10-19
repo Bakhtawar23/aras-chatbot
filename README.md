@@ -5,8 +5,6 @@ answers questions about **ARAS Innovator configuration and development**
 using your own uploaded documentation — instead of relying on GPT's
 general training knowledge.
 
-See `HOW_IT_WORKS.txt` for a full step-by-step explanation of the
-pipeline (great for interview prep / resume talking points).
 
 ---
 
@@ -20,6 +18,9 @@ pipeline (great for interview prep / resume talking points).
 4. The app finds the most relevant chunks from your documents and gives
    them to GPT-4o-mini, which answers using ONLY that context — and cites
    the source document.
+
+   ![Uploading image.png…]()
+
 
 ---
 
@@ -116,16 +117,3 @@ chatbot's answers will be — it can only answer from what you give it.
 
 ---
 
-## How to explain this project in an interview
-
-"I built ARAS ChatBot, a Retrieval Augmented Generation assistant for
-ARAS Innovator PLM documentation. It extracts text from uploaded
-configuration/development guides, splits it into overlapping chunks,
-embeds each chunk using OpenAI's embedding model, and stores the
-vectors in Qdrant. When a user asks a question, I embed the question
-the same way, run a cosine-similarity search in Qdrant to retrieve the
-most relevant chunks, and pass them to GPT-4o-mini as context so it
-answers only from our own ARAS documentation — with the source
-document cited. The backend is FastAPI, the frontend is Streamlit, and
-every module (extractor, chunker, embedder, vector store, pipeline) is
-a separate, single-responsibility file so it's easy to read and extend."

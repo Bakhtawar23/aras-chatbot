@@ -92,14 +92,3 @@ Streamlit UI (sidebar → "Upload ARAS Documents"), or POST them to the
 stores them in Qdrant automatically — that's the whole point of this
 pipeline.
 
-
-INTERVIEW EXPLANATION (Copy This)
------------------------------------
-"I built ARAS ChatBot — a RAG-based assistant for Aras Innovator PLM
- documentation. Engineers upload configuration and development guides,
- the system chunks and embeds them using OpenAI, stores the vectors in
- Qdrant, and retrieves the most relevant sections when someone asks a
- question like 'how do I configure a Life Cycle Map'. GPT-4o-mini then
- generates a grounded answer citing the exact document it came from —
- so answers stay accurate to our specific ARAS setup instead of relying
- on generic internet knowledge."

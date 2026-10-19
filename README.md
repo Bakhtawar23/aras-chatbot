@@ -19,7 +19,8 @@ general training knowledge.
    them to GPT-4o-mini, which answers using ONLY that context — and cites
    the source document.
 
-   ![Uploading image.png…]()
+  <img width="1919" height="879" alt="image" src="https://github.com/user-attachments/assets/490dd5fe-7b4a-4eb2-8e2c-49bfbec6742d" />
+
 
 
 ---

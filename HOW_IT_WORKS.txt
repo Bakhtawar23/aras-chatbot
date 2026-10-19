@@ -1,0 +1,105 @@
+
+ARAS CHATBOT — Read This First
+================================
+
+WHAT IS THIS PROJECT?
+----------------------
+A chatbot that answers questions about ARAS Innovator — its configuration
+options and development methods — by reading YOUR uploaded ARAS documents
+(PDF / DOCX / TXT) instead of guessing from general training data.
+
+Example questions it should answer once you upload your ARAS docs:
+  - "How do I create a new ItemType in Aras?"
+  - "What is the difference between a Form and a Grid in Aras?"
+  - "How do I configure a Workflow Life Cycle Map?"
+  - "What method type should I use for a server-side event?"
+
+
+WHAT IS RAG?
+------------
+RAG = Retrieval Augmented Generation.
+Instead of asking GPT questions from its training data,
+we FIRST search our own ARAS documents, THEN give those results to GPT.
+
+Result: GPT answers using YOUR ARAS documentation, not guesswork —
+so it stays accurate to your specific version/configuration.
+
+
+THE FLOW (Step by Step)
+-----------------------
+
+STEP 1 — You upload an ARAS doc (e.g. "ItemType_Configuration_Guide.pdf")
+         ↓
+STEP 2 — We extract the raw text from the file
+         ↓
+STEP 3 — We split the text into small chunks (e.g. 500 characters each)
+         WHY? GPT has a context limit — can't read a 200-page manual at once.
+         ↓
+STEP 4 — We convert each chunk into an "embedding" (a list of 1536 numbers)
+         WHY? Numbers let us do math-based similarity search later.
+         ↓
+STEP 5 — We store those numbers + the original text in Qdrant (vector database)
+         ↓
+         [Document is now indexed. Ready for questions.]
+
+
+STEP 6 — User asks: "How do I configure a Life Cycle Map in Aras?"
+         ↓
+STEP 7 — We convert the question into an embedding (same process as chunks)
+         ↓
+STEP 8 — We search Qdrant: "Find chunks whose numbers are closest to the question's numbers"
+         This is SEMANTIC SEARCH — finds meaning, not just keywords.
+         ↓
+STEP 9 — We get back the top 5 most relevant chunks from your ARAS docs
+         ↓
+STEP 10 — We build a prompt:
+          "Here is context from ARAS documentation: [chunks].
+           Answer this question: [user question]"
+         ↓
+STEP 11 — We send that prompt to GPT-4o-mini
+         ↓
+STEP 12 — GPT reads the ARAS context and answers ONLY based on it
+         ↓
+STEP 13 — We return the answer + which document/chunk it came from
+
+
+FILE STRUCTURE (What Each File Does)
+-------------------------------------
+
+aras-chatbot/
+│
+├── app/
+│   ├── config.py        ← All settings (API keys, model names, chunk size)
+│   ├── extractor.py     ← Reads PDF/DOCX/TXT → returns plain text
+│   ├── chunker.py       ← Splits text → returns list of small chunks
+│   ├── embedder.py      ← Sends text to OpenAI → returns list of numbers
+│   ├── vector_store.py  ← Saves/searches chunks in Qdrant database
+│   ├── rag_pipeline.py  ← The brain: ties all steps together
+│   └── main.py          ← FastAPI web server (the entry point)
+│
+├── frontend.py          ← Streamlit chat UI (what the user sees)
+│
+├── requirements.txt     ← Python packages to install
+├── .env.example         ← Copy this to .env and fill in your API key
+└── README.md            ← Setup instructions + how to add your ARAS docs
+
+
+WHERE DO I ADD MY ARAS DOCUMENTS?
+-----------------------------------
+You don't add them to a folder manually — you UPLOAD them through the
+Streamlit UI (sidebar → "Upload ARAS Documents"), or POST them to the
+/documents/upload API endpoint. The app extracts, chunks, embeds, and
+stores them in Qdrant automatically — that's the whole point of this
+pipeline.
+
+
+INTERVIEW EXPLANATION (Copy This)
+-----------------------------------
+"I built ARAS ChatBot — a RAG-based assistant for Aras Innovator PLM
+ documentation. Engineers upload configuration and development guides,
+ the system chunks and embeds them using OpenAI, stores the vectors in
+ Qdrant, and retrieves the most relevant sections when someone asks a
+ question like 'how do I configure a Life Cycle Map'. GPT-4o-mini then
+ generates a grounded answer citing the exact document it came from —
+ so answers stay accurate to our specific ARAS setup instead of relying
+ on generic internet knowledge."

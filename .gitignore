@@ -1,0 +1,11 @@
+# Secrets: never commit these
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Local vector database (contains chunks of your ARAS documents)
+qdrant_data/

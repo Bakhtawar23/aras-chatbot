@@ -41,56 +41,8 @@ aras-chatbot/
 ├── frontend.py           ← Streamlit chat UI
 ├── requirements.txt
 ├── .env.example
-└── HOW_IT_WORKS.txt       ← Plain-English explanation of the whole flow
+└── HOW_IT_WORKS.txt     
 ```
-
----
-
-## Setup
-
-### 1. Start Qdrant (the vector database)
-
-The easiest way is Docker:
-```bash
-docker run -p 6333:6333 qdrant/qdrant
-```
-(If you don't have Docker, you can run Qdrant natively — see
-https://qdrant.tech/documentation/quick-start/)
-
-### 2. Install Python dependencies
-
-```bash
-python -m venv .venv
-source .venv/bin/activate      # Windows: .venv\Scripts\activate
-
-pip install -r requirements.txt
-```
-
-### 3. Configure your API key
-
-```bash
-cp .env.example .env
-```
-Open `.env` and set:
-```
-OPENAI_API_KEY=sk-...your real key...
-```
-
-### 4. Start the backend (FastAPI)
-
-```bash
-uvicorn app.main:app --reload --port 8000
-```
-Visit **http://localhost:8000/docs** to see and test all API endpoints interactively.
-
-### 5. Start the frontend (Streamlit) — in a new terminal
-
-```bash
-streamlit run frontend.py
-```
-Visit **http://localhost:8501** — upload your ARAS docs in the sidebar, then start chatting.
-
----
 
 ## API Endpoints (for reference)
 
